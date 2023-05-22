@@ -15,8 +15,11 @@ export const SearchInput: React.FC<SearchInput> = ({ onSearch }) => {
         value={input}
         onChangeText={setInput}
         placeholder="Search user"
+        placeholderTextColor="#AAA"
       />
-      <Button onPress={() => onSearch(input)} title="Search" />
+      <View style={styles.buttonContainer}>
+        <Button onPress={() => onSearch(input)} title="Search" color="#FFF" />
+      </View>
     </View>
   );
 };
@@ -27,12 +30,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 20,
+    marginHorizontal: 10,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#000",
+    borderColor: "#EEE",
     padding: 10,
+    borderRadius: 25,
     marginRight: 10,
     flex: 1,
+    color: "#000",
+  },
+  buttonContainer: {
+    backgroundColor: "#0080ff",
+    borderRadius: 25,
+    paddingHorizontal: 15,
+    height: 50,
+    justifyContent: "center",
   },
 });

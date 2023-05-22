@@ -1,14 +1,9 @@
 import { Request, Response } from "express";
 import expressPaginate from "express-paginate";
-import fs from "fs";
 import _ from "lodash";
 import { config } from "../../../config";
-import { User } from "../types/user";
-
-const getDatabase = (): Record<string, User> => {
-  const rawData = fs.readFileSync(config.dbPath);
-  return JSON.parse(rawData.toString()).data;
-};
+import { getDatabase } from "../../db";
+import { UserDocument } from "../../types/user";
 
 export const getUsers = (req: Request, res: Response) => {
   const { query } = req.query;
@@ -19,13 +14,15 @@ export const getUsers = (req: Request, res: Response) => {
     ...value,
   }));
 
+  users = _.orderBy(users, ["bananas"], ["desc"]);
+
+  users = users.map((user, index) => ({ ...user, rank: index + 1 }));
+
   if (query) {
     users = users.filter((user) =>
       user.name.toLowerCase().includes(String(query).toLowerCase())
     );
   }
-
-  users = _.orderBy(users, ["bananas"], ["desc"]);
 
   const pageCount = Math.ceil(users.length / Number(req.query.limit));
 
@@ -36,7 +33,7 @@ export const getUsers = (req: Request, res: Response) => {
 
   users = users.slice(skip, skip + limit);
 
-  const usersData: Record<string, User> = users.reduce(
+  const usersData: UserDocument = users.reduce(
     (acc, user) => ({ ...acc, [user.uid]: user }),
     {}
   );

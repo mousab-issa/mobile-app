@@ -13,16 +13,12 @@ export const useTableData = (
     users: UserData[],
     searchedUser: UserData | null = null
   ) => {
-    const sortedUserData = _.orderBy(userData, ["bananas"], ["desc"]);
-
     const tableData: TableRow[] = users.map((user, index) => {
       const isSearchedUser = user.uid === searchedUser?.uid;
 
       return {
         name: user.name,
-        rank: isSearchedUser
-          ? _.findIndex(sortedUserData, { uid: user.uid }) + 1
-          : index + 1,
+        rank: user.rank,
         bananas: user.bananas,
         isSearchedUser: `${isSearchedUser}`,
       };
@@ -38,7 +34,7 @@ export const useTableData = (
 
       tableData.push({
         name: searchedUser.name,
-        rank: _.findIndex(sortedUserData, { uid: searchedUser.uid }) + 1,
+        rank: searchedUser.rank,
         bananas: searchedUser.bananas,
         isSearchedUser: "true",
       });
