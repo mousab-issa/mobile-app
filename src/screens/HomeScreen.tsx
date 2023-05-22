@@ -38,7 +38,7 @@ export const HomeScreen = () => {
   return (
     <Screen safeAreaEdges={["top"]} preset="scroll">
       <SearchInput onSearch={onSearch} />
-      <Table borderStyle={styles.tableContainer}>
+      <Table testID="table" borderStyle={styles.tableContainer}>
         <Row data={tableHead} style={styles.head} textStyle={styles.text} />
         <Rows
           data={tableData.map(Object.values)}
