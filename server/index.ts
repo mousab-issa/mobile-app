@@ -1,6 +1,6 @@
 import express from "express";
 import { config } from "./config";
-import usersRouter from "./routes/v1/users";
+import usersRouter from "./api/v1/routes/users";
 
 const app = express();
 app.use(express.json());
