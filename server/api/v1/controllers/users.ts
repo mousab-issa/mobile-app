@@ -1,14 +1,9 @@
 import { Request, Response } from "express";
 import expressPaginate from "express-paginate";
-import fs from "fs";
 import _ from "lodash";
 import { config } from "../../../config";
+import { getDatabase } from "../../db";
 import { User } from "../types/user";
-
-const getDatabase = (): Record<string, User> => {
-  const rawData = fs.readFileSync(config.dbPath);
-  return JSON.parse(rawData.toString()).data;
-};
 
 export const getUsers = (req: Request, res: Response) => {
   const { query } = req.query;
