@@ -14,13 +14,15 @@ export const getUsers = (req: Request, res: Response) => {
     ...value,
   }));
 
+  users = _.orderBy(users, ["bananas"], ["desc"]);
+
+  users = users.map((user, index) => ({ ...user, rank: index + 1 }));
+
   if (query) {
     users = users.filter((user) =>
       user.name.toLowerCase().includes(String(query).toLowerCase())
     );
   }
-
-  users = _.orderBy(users, ["bananas"], ["desc"]);
 
   const pageCount = Math.ceil(users.length / Number(req.query.limit));
 

@@ -4,30 +4,29 @@ import { Table, Row, Rows, SearchInput } from "../components";
 import { Screen } from "../components/Screen";
 import _ from "lodash";
 import { useFetchUserData, useTableData } from "../hooks";
+import { getInstance } from "../services/axios";
+
+const axios = getInstance();
 
 export const HomeScreen = () => {
-  const userData = useFetchUserData();
+  const { userData, searchedUser, fetchSearchedUser } = useFetchUserData();
   const [tableData, updateTableData] = useTableData(userData);
 
   const onSearch = (input: string) => {
     if (!input) return;
 
-    const sortedUsers = _.orderBy(userData, ["bananas"], ["desc"]);
+    fetchSearchedUser(input).then(() => {
+      if (!searchedUser) {
+        Alert.alert(
+          "This user name does not exist! Please specify an existing user name!"
+        );
+        return;
+      }
 
-    const searchedUser = _.find(sortedUsers, (user: UserData) =>
-      _.includes(_.toLower(user.name), _.toLower(input))
-    );
-
-    if (!searchedUser) {
-      Alert.alert(
-        "This user name does not exist! Please specify an existing user name!"
-      );
-      return;
-    }
-
-    const topTenUsers = _.take(sortedUsers, 10);
-
-    updateTableData(topTenUsers, searchedUser);
+      const sortedUsers = _.orderBy(userData, ["bananas"], ["desc"]);
+      const topTenUsers = _.take(sortedUsers, 10);
+      updateTableData(topTenUsers, searchedUser);
+    });
   };
 
   const tableHead = ["Name", "Rank", "Number of bananas", "isSearchedUser?"];

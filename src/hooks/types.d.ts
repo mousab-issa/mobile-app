@@ -6,6 +6,7 @@ interface UserData {
   longestStreak: number;
   stars: number;
   subscribed: boolean;
+  rank: number;
 }
 
 interface TableRow {
