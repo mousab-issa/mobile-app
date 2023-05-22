@@ -3,7 +3,7 @@ import expressPaginate from "express-paginate";
 import _ from "lodash";
 import { config } from "../../../config";
 import { getDatabase } from "../../db";
-import { User } from "../types/user";
+import { UserDocument } from "../../types/user";
 
 export const getUsers = (req: Request, res: Response) => {
   const { query } = req.query;
@@ -31,7 +31,7 @@ export const getUsers = (req: Request, res: Response) => {
 
   users = users.slice(skip, skip + limit);
 
-  const usersData: Record<string, User> = users.reduce(
+  const usersData: UserDocument = users.reduce(
     (acc, user) => ({ ...acc, [user.uid]: user }),
     {}
   );

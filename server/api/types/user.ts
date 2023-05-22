@@ -7,3 +7,5 @@ export interface User {
   subscribed: boolean;
   uid: string;
 }
+
+export type UserDocument = Record<string, User>;
