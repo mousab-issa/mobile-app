@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import expressPaginate from "express-paginate";
 import fs from "fs";
 import _ from "lodash";
-import { config } from "../../config";
-import { User } from "../../types/user";
+import { config } from "../../../config";
+import { User } from "../types/user";
 
 const getDatabase = (): Record<string, User> => {
   const rawData = fs.readFileSync(config.dbPath);
