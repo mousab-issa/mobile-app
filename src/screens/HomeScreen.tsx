@@ -4,7 +4,6 @@ import { Table, Row, Rows, SearchInput } from "../components";
 import { Screen } from "../components/Screen";
 import _ from "lodash";
 import { useTableData } from "../hooks";
-import { getInstance } from "../services/axios";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchSearchedUser, fetchUsers } from "../store/users/actions";
 
@@ -26,8 +25,6 @@ export const HomeScreen = () => {
     const sortedUsers = _.orderBy(users, ["bananas"], ["desc"]);
     const topTenUsers = _.take(sortedUsers, 10);
     updateTableData(topTenUsers, searchedUser);
-
-    console.log(searchedUser);
   }, [searchedUser]);
 
   const onSearch = async (input: string) => {
@@ -39,7 +36,7 @@ export const HomeScreen = () => {
   const tableHead = ["Name", "Rank", "Number of bananas", "isSearchedUser?"];
 
   return (
-    <Screen safeAreaEdges={["top"]}>
+    <Screen safeAreaEdges={["top"]} preset="scroll">
       <SearchInput onSearch={onSearch} />
       <Table borderStyle={styles.tableContainer}>
         <Row data={tableHead} style={styles.head} textStyle={styles.text} />
