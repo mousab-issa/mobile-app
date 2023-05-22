@@ -19,9 +19,15 @@ interface TableProps {
   style?: StyleProp<ViewStyle>;
   borderStyle?: BorderStyle;
   children: ReactNode;
+  testID?: string;
 }
 
-export const Table: FC<TableProps> = ({ style, borderStyle, children }) => {
+export const Table: FC<TableProps> = ({
+  style,
+  borderStyle,
+  children,
+  testID,
+}) => {
   const borderLeftWidth = borderStyle?.borderWidth ?? 0;
   const borderBottomWidth = borderLeftWidth;
   const borderColor = borderStyle?.borderColor ?? "#000";
@@ -38,6 +44,7 @@ export const Table: FC<TableProps> = ({ style, borderStyle, children }) => {
 
   return (
     <View
+      testID={testID}
       style={[
         style,
         {
