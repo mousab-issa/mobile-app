@@ -1,4 +1,8 @@
-export interface User {
+interface ApiResponse<T> {
+  data: T;
+}
+
+interface UserData {
   bananas: number;
   lastDayPlayed: string;
   longestStreak: number;
@@ -6,6 +10,14 @@ export interface User {
   stars: number;
   subscribed: boolean;
   uid: string;
+  rank: number;
 }
 
-export type UserDocument = Record<string, User>;
+interface UserState {
+  users: UserData[];
+  searchedUser: UserData | null;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
+}
+
+type UserDataPayload = ApiResponse<UserData[]>;

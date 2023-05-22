@@ -1,32 +1,39 @@
-import React from "react";
-import { View, Alert, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet } from "react-native";
 import { Table, Row, Rows, SearchInput } from "../components";
 import { Screen } from "../components/Screen";
 import _ from "lodash";
-import { useFetchUserData, useTableData } from "../hooks";
+import { useTableData } from "../hooks";
 import { getInstance } from "../services/axios";
-
-const axios = getInstance();
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { fetchSearchedUser, fetchUsers } from "../store/users/actions";
 
 export const HomeScreen = () => {
-  const { userData, searchedUser, fetchSearchedUser } = useFetchUserData();
-  const [tableData, updateTableData] = useTableData(userData);
+  const dispatch = useAppDispatch();
+  const { users, searchedUser, status } = useAppSelector(
+    (state) => state.users
+  );
 
-  const onSearch = (input: string) => {
+  const [tableData, updateTableData] = useTableData(users);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchUsers());
+    }
+  }, [status, dispatch]);
+
+  useEffect(() => {
+    const sortedUsers = _.orderBy(users, ["bananas"], ["desc"]);
+    const topTenUsers = _.take(sortedUsers, 10);
+    updateTableData(topTenUsers, searchedUser);
+
+    console.log(searchedUser);
+  }, [searchedUser]);
+
+  const onSearch = async (input: string) => {
     if (!input) return;
 
-    fetchSearchedUser(input).then(() => {
-      if (!searchedUser) {
-        Alert.alert(
-          "This user name does not exist! Please specify an existing user name!"
-        );
-        return;
-      }
-
-      const sortedUsers = _.orderBy(userData, ["bananas"], ["desc"]);
-      const topTenUsers = _.take(sortedUsers, 10);
-      updateTableData(topTenUsers, searchedUser);
-    });
+    dispatch(fetchSearchedUser({ input }));
   };
 
   const tableHead = ["Name", "Rank", "Number of bananas", "isSearchedUser?"];
